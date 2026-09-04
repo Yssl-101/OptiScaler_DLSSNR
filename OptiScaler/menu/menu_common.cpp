@@ -7622,8 +7622,18 @@ void MenuCommon::Init(HWND InHwnd, bool isUWP)
         if (Config::Instance()->FontSize.has_value())
             fontSize = Config::Instance()->FontSize.value();
 
-        // 菜单已汉化，需包含 CJK 字形范围
-        const ImWchar* glyphRanges = io.Fonts->GetGlyphRangesChineseFull();
+        // 菜单已汉化，需包含 CJK 字形范围。
+        // 注意：工程定义了 IMGUI_DISABLE_OBSOLETE_FUNCTIONS，GetGlyphRangesChineseFull() 不可用，
+        // 故改用静态 Unicode 范围数组（覆盖简体中文常用汉字与全角标点）。
+        static const ImWchar glyphRanges[] =
+        {
+            0x0020, 0x00FF, // Basic Latin + Latin Supplement
+            0x2000, 0x206F, // General Punctuation
+            0x3000, 0x30FF, // CJK Symbols and Punctuations, Hiragana, Katakana
+            0xFF00, 0xFFEF, // Half-width and Full-width Forms
+            0x4E00, 0x9FFF, // CJK Unified Ideographs
+            0,
+        };
 
         if (Config::Instance()->TTFFontPath.has_value())
         {
