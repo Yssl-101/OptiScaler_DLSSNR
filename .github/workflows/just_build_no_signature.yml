@@ -27,7 +27,6 @@ permissions:
 jobs:
   build:
     runs-on: windows-latest
-    environment: Build
 
     steps:
     - uses: actions/checkout@v6
