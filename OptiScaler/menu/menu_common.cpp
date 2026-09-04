@@ -2700,15 +2700,7 @@ void MenuCommon::RenderActiveUpscalerSettings(RenderMenuContext& ctx)
                         state.newBackend = currentBackend;
                         MARK_ALL_BACKENDS_CHANGED();
                     }
-                    ShowHelpMarker("每个内部 FSR4 预设针对特定分辨率调校。选择 FSR4 预设不会改变游戏内
-上采样器预设！！！
-
-预设 0 用于 FSR 原生 AA
-预设 1 用于质量/超高质量
-预设 2 用于平衡
-预设 3 用于性能
-预设 4 用于 DRS
-预设 5 用于极致性能");
+                    ShowHelpMarker("每个内部 FSR4 预设针对特定分辨率调校。选择 FSR4 预设不会改变游戏内\n上采样器预设！！！\n\n预设 0 用于 FSR 原生 AA\n预设 1 用于质量/超高质量\n预设 2 用于平衡\n预设 3 用于性能\n预设 4 用于 DRS\n预设 5 用于极致性能");
 
                     // Display the active preset right next to the combo box instead of using a table
                     ImGui::SameLine();
@@ -2743,13 +2735,7 @@ void MenuCommon::RenderActiveUpscalerSettings(RenderMenuContext& ctx)
                     }
                     else
                     {
-                        ShowHelpMarker("左上：膨胀运动矢量
-中上：保护区
-右上：膨胀深度
-中部：上采样后的画面
-左下：去遮挡掩码
-中下：反应性
-右下：细节保护削减");
+                        ShowHelpMarker("左上：膨胀运动矢量\n中上：保护区\n右上：膨胀深度\n中部：上采样后的画面\n左下：去遮挡掩码\n中下：反应性\n右下：细节保护削减");
                     }
 
                     if (majorFsrVersion > 3)
@@ -2867,10 +2853,7 @@ void MenuCommon::RenderActiveUpscalerSettings(RenderMenuContext& ctx)
                             if (ImGui::SliderFloat("每帧累加量", &accAddPerFrame, 0.0f, 1.0f, "%.3f"))
                                 config->FsrAccAddPerFrame = accAddPerFrame;
 
-                            ShowHelpMarker("对应每帧在发生去遮挡或反应掩码值 > 0.0 的像素坐标处
-增加的累加量。调低它并把鬼影物体（即无运动矢量）
-以接近 1.0 的值画到反应掩码，可减轻时序鬼影。
-调低可能导致更多细特征像素闪烁。");
+                            ShowHelpMarker("对应每帧在发生去遮挡或反应掩码值 > 0.0 的像素坐标处\n增加的累加量。调低它并把鬼影物体（即无运动矢量）\n以接近 1.0 的值画到反应掩码，可减轻时序鬼影。\n调低可能导致更多细特征像素闪烁。");
 
                             // Min Disocclusion Accumulation
                             float minDisOccAcc = config->FsrMinDisOccAcc.value_or_default();
@@ -3664,15 +3647,7 @@ void MenuCommon::RenderFrameGenerationRuntimeSettings(RenderMenuContext& ctx)
                     LOG_DEBUG("DebugView set FGChanged");
                 }
             }
-            ShowHelpMarker("启用 FSR3.1 帧生成调试视图
-
-左上：游戏运动矢量
-中上：GMV 深度
-右上：光流运动矢量
-中部：仅插值帧
-左下：去遮挡掩码
-中下：插值来源（无 UI）
-右下：无界面资源");
+            ShowHelpMarker("启用 FSR3.1 帧生成调试视图\n\n左上：游戏运动矢量\n中上：GMV 深度\n右上：光流运动矢量\n中部：仅插值帧\n左下：去遮挡掩码\n中下：插值来源（无 UI）\n右下：无界面资源");
 
             ImGui::SameLine(0.0f, 16.0f);
 
@@ -4676,15 +4651,7 @@ void MenuCommon::RenderFrameGenerationRuntimeSettings(RenderMenuContext& ctx)
                         LOG_DEBUG("DebugView set FGChanged");
                     }
                 }
-                ShowHelpMarker("启用 FSR3.1 帧生成调试视图
-
-左上：游戏运动矢量
-中上：GMV 深度
-右上：光流运动矢量
-中部：仅插值帧
-左下：去遮挡掩码
-中下：插值来源（无 UI）
-右下：无界面资源");
+                ShowHelpMarker("启用 FSR3.1 帧生成调试视图\n\n左上：游戏运动矢量\n中上：GMV 深度\n右上：光流运动矢量\n中部：仅插值帧\n左下：去遮挡掩码\n中下：插值来源（无 UI）\n右下：无界面资源");
 
                 if (Nvngx_FG::version().major > 3)
                 {
@@ -5237,11 +5204,7 @@ void MenuCommon::RenderActiveImageSettings(RenderMenuContext& ctx)
             if (bool rcas = config->RcasEnabled.value_or(rcasEnabled); ImGui::Checkbox("启用 RCAS/DA", &rcas))
                 config->RcasEnabled = rcas;
 
-            ShowHelpMarker("启用 OptiScaler 的锐化滤镜
-默认使用游戏提供的锐化值
-在「锐化」下选「覆盖」并拖动滑块即可更改
-
-部分上采样器自带锐化滤镜，因此此项并非总是需要");
+            ShowHelpMarker("启用 OptiScaler 的锐化滤镜\n默认使用游戏提供的锐化值\n在「锐化」下选「覆盖」并拖动滑块即可更改\n\n部分上采样器自带锐化滤镜，因此此项并非总是需要");
 
             ImGui::BeginDisabled(!config->RcasEnabled.value_or(rcasEnabled));
 
@@ -5271,11 +5234,7 @@ void MenuCommon::RenderActiveImageSettings(RenderMenuContext& ctx)
                 Config::Instance()->SharpnessShader = SharpenShader::LocalContrastDepthAware;
             }
 
-            ShowHelpMarker("使用深度感知锐化（DAS）
-深度感知方向自适应亮度锐化器
-更智能、伪影更少，但更耗性能
-
-物体越远，锐化越强");
+            ShowHelpMarker("使用深度感知锐化（DAS）\n深度感知方向自适应亮度锐化器\n更智能、伪影更少，但更耗性能\n\n物体越远，锐化越强");
 
             ImGui::Spacing();
 
@@ -5305,12 +5264,7 @@ void MenuCommon::RenderActiveImageSettings(RenderMenuContext& ctx)
                             config->DAClampOutput.reset();
                     }
 
-                    ShowHelpMarker("把最终画面钳制到 [0, 1] 范围。
-
-防止过冲伪影（如亮光晕或负色）。
-推荐 LDR 管线；HDR 视色调映射可选。
-
-未设置时 OptiScaler 通过上采样器 HDR 标志控制");
+                    ShowHelpMarker("把最终画面钳制到 [0, 1] 范围。\n\n防止过冲伪影（如亮光晕或负色）。\n推荐 LDR 管线；HDR 视色调映射可选。\n\n未设置时 OptiScaler 通过上采样器 HDR 标志控制");
 
                     if (currentFeature->DepthLinear())
                     {
@@ -5318,19 +5272,13 @@ void MenuCommon::RenderActiveImageSettings(RenderMenuContext& ctx)
                         if (ImGui::SliderFloat("深度偏置", &depthBias, 0.005f, 0.03f, "%.4f"))
                             config->DADepthBias = depthBias;
 
-                        ShowHelpMarker("边缘检测前忽略小的深度差异。
-
-值越高越能减少微小深度变化带来的闪烁与噪声，但可能软化真实几何边缘。
-值越低越保留精细细节，但可能导致边缘检测不稳定或有噪声。");
+                        ShowHelpMarker("边缘检测前忽略小的深度差异。\n\n值越高越能减少微小深度变化带来的闪烁与噪声，但可能软化真实几何边缘。\n值越低越保留精细细节，但可能导致边缘检测不稳定或有噪声。");
 
                         float depthScale = config->DADepthScale.value_or(250.0f);
                         if (ImGui::SliderFloat("深度缩放", &depthScale, 100.0f, 600.0f, "%.1f"))
                             config->DADepthScale = depthScale;
 
-                        ShowHelpMarker("控制锐化跨深度边缘被削减的强度。
-
-值越高越积极阻止跨物体边界的锐化（减少光晕）。
-值越低允许更多锐化穿过边缘（更锐利但更冒险）。");
+                        ShowHelpMarker("控制锐化跨深度边缘被削减的强度。\n\n值越高越积极阻止跨物体边界的锐化（减少光晕）。\n值越低允许更多锐化穿过边缘（更锐利但更冒险）。");
                     }
                     else
                     {
@@ -5338,19 +5286,13 @@ void MenuCommon::RenderActiveImageSettings(RenderMenuContext& ctx)
                         if (ImGui::SliderFloat("深度偏置", &depthBias, 0.0001f, 0.003f, "%.4f"))
                             config->DADepthBias = depthBias;
 
-                        ShowHelpMarker("边缘检测前忽略小的深度差异。
-
-值越高越能减少微小深度变化带来的闪烁与噪声，但可能软化真实几何边缘。
-值越低越保留精细细节，但可能导致边缘检测不稳定或有噪声。");
+                        ShowHelpMarker("边缘检测前忽略小的深度差异。\n\n值越高越能减少微小深度变化带来的闪烁与噪声，但可能软化真实几何边缘。\n值越低越保留精细细节，但可能导致边缘检测不稳定或有噪声。");
 
                         float depthScale = config->DADepthScale.value_or(35.0f);
                         if (ImGui::SliderFloat("深度缩放", &depthScale, 25.0f, 400.0f, "%.1f"))
                             config->DADepthScale = depthScale;
 
-                        ShowHelpMarker("控制锐化跨深度边缘被削减的强度。
-
-值越高越积极阻止跨物体边界的锐化（减少光晕）。
-值越低允许更多锐化穿过边缘（更锐利但更冒险）。");
+                        ShowHelpMarker("控制锐化跨深度边缘被削减的强度。\n\n值越高越积极阻止跨物体边界的锐化（减少光晕）。\n值越低允许更多锐化穿过边缘（更锐利但更冒险）。");
                     }
 
                     if (ImGui::Button("重置深度参数"))
@@ -5399,12 +5341,7 @@ void MenuCommon::RenderActiveImageSettings(RenderMenuContext& ctx)
                 ImGui::SliderFloat("运动锐度", &motionSharpness, -1.0f, 1.0f, "%.3f");
                 config->MotionSharpness = motionSharpness;
 
-                ShowHelpMarker("运动可增加或减少锐化的最大幅度。
-
-负值在运动中降低锐化（推荐）。
-正值在运动中增加锐化。
-
-最终调整随运动缩放并以此值为上限。");
+                ShowHelpMarker("运动可增加或减少锐化的最大幅度。\n\n负值在运动中降低锐化（推荐）。\n正值在运动中增加锐化。\n\n最终调整随运动缩放并以此值为上限。");
 
                 float motionThreshod = config->MotionThreshold.value_or_default();
                 ImGui::SliderFloat("运动阈值", &motionThreshod, 0.0f, 100.0f, "%.2f");
@@ -5416,11 +5353,7 @@ void MenuCommon::RenderActiveImageSettings(RenderMenuContext& ctx)
                 ImGui::SliderFloat("运动范围", &motionScale, 0.01f, 100.0f, "%.2f");
                 config->MotionScaleLimit = motionScale;
 
-                ShowHelpMarker("定义效果从零到满强度渐变所跨越的运动范围。
-
-阈值以上的值被映射到此范围。
-值越大响应越平滑渐进。
-值越小响应越快越激进。");
+                ShowHelpMarker("定义效果从零到满强度渐变所跨越的运动范围。\n\n阈值以上的值被映射到此范围。\n值越大响应越平滑渐进。\n值越小响应越快越激进。");
 
                 ImGui::EndDisabled();
 
@@ -5518,15 +5451,7 @@ void MenuCommon::RenderActiveImageSettings(RenderMenuContext& ctx)
                 ImGui::Checkbox("启用", &_ssEnabled);
                 ImGui::EndDisabled();
 
-                ShowHelpMarker("先在内部把画面升到更高输出分辨率
-再降回你的显示分辨率
-
-值 <1.0 让上采样器更省
-值 >1.0 让画面更锐利但耗性能
-
-若置灰请查阅 Git Wiki - 虚幻引擎调整
-
-目标分辨率与总倍率在底部（总倍率最大 3.0！）");
+                ShowHelpMarker("先在内部把画面升到更高输出分辨率\n再降回你的显示分辨率\n\n值 <1.0 让上采样器更省\n值 >1.0 让画面更锐利但耗性能\n\n若置灰请查阅 Git Wiki - 虚幻引擎调整\n\n目标分辨率与总倍率在底部（总倍率最大 3.0！）");
 
                 ImGui::SameLine(0.0f, 6.0f);
 
@@ -6651,14 +6576,7 @@ void MenuCommon::RenderApiAndTextureSettings(RenderMenuContext& ctx)
             }
             ImGui::PopItemWidth();
 
-            ShowHelpMarker("控制 DXGI Present 同步间隔，决定交换链如何等待垂直刷新。
-
-0  = 立即呈现，不等待垂直同步。
-1  = 每次刷新同步，正常垂直同步。
-2+ = 每 N 次刷新呈现一次，降低实际帧率。
-
-值越高越能减少撕裂，但可能增加延迟并限制帧率。
-多数游戏用 0 获得最低延迟，或用 1 获得正常垂直同步。");
+            ShowHelpMarker("控制 DXGI Present 同步间隔，决定交换链如何等待垂直刷新。\n\n0  = 立即呈现，不等待垂直同步。\n1  = 每次刷新同步，正常垂直同步。\n2+ = 每 N 次刷新呈现一次，降低实际帧率。\n\n值越高越能减少撕裂，但可能增加延迟并限制帧率。\n多数游戏用 0 获得最低延迟，或用 1 获得正常垂直同步。");
 
             ImGui::EndDisabled();
             ImGui::SameLine(0.0f, 16.0f);

@@ -94,12 +94,7 @@ void RenderMenu(Config* config, float menuResScale)
         if (ImGui::Checkbox("启用神经渲染", &enabled))
             config->DlssNrEnabled = enabled;
 
-        HelpMarker("在上采样器输出上合成细节，发生在帧生成看到画面之前。
-
-需要两个名称相近的文件放在 OptiScaler 旁，仅差一个字符：
-  nvngx_dlssnr.dll       NVIDIA 的模型（约 165 MB）——由你提供
-  nvngx.dll_dlssnr.dll   转发器（约 13 KB）——随本包附带
-未公开且直接驱动，因此全部不受官方支持。");
+        HelpMarker("在上采样器输出上合成细节，发生在帧生成看到画面之前。\n\n需要两个名称相近的文件放在 OptiScaler 旁，仅差一个字符：\nnvngx_dlssnr.dll       NVIDIA 的模型（约 165 MB）——由你提供\nnvngx.dll_dlssnr.dll   转发器（约 13 KB）——随本包附带\n未公开且直接驱动，因此全部不受官方支持。");
 
         // The toggle can be bound to a key, and nobody would think to look for it under Keybinds
         // unless told. Dimmed, because it is a note rather than a setting.
@@ -109,9 +104,7 @@ void RenderMenu(Config* config, float menuResScale)
         if (ImGui::Checkbox("应用模型", &applyModel))
             config->DlssNrApplyModel = applyModel;
 
-        HelpMarker("是否应用模型的编辑。关闭时显示干净的上采样画面，而该 pass 仍在运行——
-因此配合「冻结帧」（位于对比区）可以冻结一帧，切换此项来对比同一冻结帧
-在有无神经渲染下的差异。日常使用请保持开启。");
+        HelpMarker("是否应用模型的编辑。关闭时显示干净的上采样画面，而该 pass 仍在运行——\n因此配合「冻结帧」（位于对比区）可以冻结一帧，切换此项来对比同一冻结帧\n在有无神经渲染下的差异。日常使用请保持开启。");
 
         // Either backend. The two keep separate state, and on a native Vulkan game the D3D12 side
         // is never touched -- so asking only that one reports "waiting for the upscaler" over a pass
@@ -169,9 +162,7 @@ void RenderMenu(Config* config, float menuResScale)
             ImGui::SameLine();
             ImGui::TextDisabled("(?)");
             if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
-                ImGui::SetTooltip("整个 pass：暂存拷贝与合成，以及模型本身。只计时模型会让数字显得好看。
-
-与本窗口底部的帧时间对比，即可看出它消耗了多少。");
+                ImGui::SetTooltip("整个 pass：暂存拷贝与合成，以及模型本身。只计时模型会让数字显得好看。\n\n与本窗口底部的帧时间对比，即可看出它消耗了多少。");
         }
 
         ImGui::Spacing();
@@ -202,8 +193,7 @@ void RenderMenu(Config* config, float menuResScale)
         }
 
         if (scalePercent > 100)
-            ImGui::TextDisabled("超采样 %.2fx：模型以高于原生分辨率运行，随后
-采样回降。实验性且开销大——耗时随面积增长。",
+            ImGui::TextDisabled("超采样 %.2fx：模型以高于原生分辨率运行，随后\n采样回降。实验性且开销大——耗时随面积增长。",
                                 scalePercent / 100.0f);
 
         if (scalePercent > 100)
@@ -217,24 +207,10 @@ void RenderMenu(Config* config, float menuResScale)
             if (ImGui::Combo("降采样器（神经渲染）", &ds, dsNames, IM_ARRAYSIZE(dsNames)))
                 config->DlssNrScalingDownscaler = (Scaler) ds;
 
-            HelpMarker("把模型高于原生分辨率的答案平均回显示尺寸的滤镜——
-这正是让超采样减少而非增加噪声的关键。更锐利的滤镜（兰佐斯3、凯撒3）
-保留最多细节；更柔和的（双三次、Catmull-Rom）对振铃更温和。
-与输出缩放降采样器相互独立，两者可不同并可同时运行。");
+            HelpMarker("把模型高于原生分辨率的答案平均回显示尺寸的滤镜——\n这正是让超采样减少而非增加噪声的关键。更锐利的滤镜（兰佐斯3、凯撒3）\n保留最多细节；更柔和的（双三次、Catmull-Rom）对振铃更温和。\n与输出缩放降采样器相互独立，两者可不同并可同时运行。");
         }
 
-        HelpMarker("模型以画面多大比例工作。成本随此值的平方下降，
-因此一半分辨率约为四分之一耗时。
-
-画面本身从不缩小。只有模型的贡献在小尺寸计算再放大，
-所以无论此值如何，底下的画面都不受影响。
-
-代价是：模型添加的明暗是宽泛的、经得起放大；
-而它合成的精细结构则不然，会变柔。当该 pass 的成本
-高于你愿为它返回的细节所付时，就值得用。
-
-无论此值如何，画面本身始终保留完整细节——只有模型
-自己的工作在小尺寸完成。");
+        HelpMarker("模型以画面多大比例工作。成本随此值的平方下降，\n因此一半分辨率约为四分之一耗时。\n\n画面本身从不缩小。只有模型的贡献在小尺寸计算再放大，\n所以无论此值如何，底下的画面都不受影响。\n\n代价是：模型添加的明暗是宽泛的、经得起放大；\n而它合成的精细结构则不然，会变柔。当该 pass 的成本\n高于你愿为它返回的细节所付时，就值得用。\n\n无论此值如何，画面本身始终保留完整细节——只有模型\n自己的工作在小尺寸完成。");
 
         // Meaningful only when the model runs BELOW the frame's size. At 100% -- and above, where
         // supersampling composites its down-legged answer at native -- the residual collapses to the
@@ -254,20 +230,7 @@ void RenderMenu(Config* config, float menuResScale)
             if (!reduced)
                 ImGui::EndDisabled();
 
-            HelpMarker("当模型以低于画面尺寸运行时，其工作如何被放大回来。
-
-经典：把模型的小图直接与全尺寸画面合成。两者之间的差异既来自
-缩小的模糊，也来自模型的编辑，而合成无法区分它们——它把模糊当成
-画面已有、模型从未见过的亮度。模型分辨率越低，误差越大，
-在 50% 时就表现为色偏。
-
-匹配残差：只把模型的差值放大回来，叠加到画面自身的代理上，
-因此被比较的两张图都是全尺寸，唯一来自小栅格的只有编辑本身。
-
-在 100% 或以上无效果：没有残差可携带，两者相同
-（超采样会在此之前把答案降回画面尺寸）。
-
-源自 hhkbble 在此分支上的多 pass 工作。");
+            HelpMarker("当模型以低于画面尺寸运行时，其工作如何被放大回来。\n\n经典：把模型的小图直接与全尺寸画面合成。两者之间的差异既来自\n缩小的模糊，也来自模型的编辑，而合成无法区分它们——它把模糊当成\n画面已有、模型从未见过的亮度。模型分辨率越低，误差越大，\n在 50% 时就表现为色偏。\n\n匹配残差：只把模型的差值放大回来，叠加到画面自身的代理上，\n因此被比较的两张图都是全尺寸，唯一来自小栅格的只有编辑本身。\n\n在 100% 或以上无效果：没有残差可携带，两者相同\n（超采样会在此之前把答案降回画面尺寸）。\n\n源自 hhkbble 在此分支上的多 pass 工作。");
         }
 
         ImGui::SeparatorText("效果落地比例");
@@ -280,17 +243,7 @@ void RenderMenu(Config* config, float menuResScale)
         if (ImGui::SmallButton("重置##detail"))
             config->DlssNrTransferStrength = 1.0f;
 
-        HelpMarker("画面向模型画面靠拢的程度。
-
-模型的答案不是叠加到画面上——它是一张完整的画面，
-已重新缩放使其亮度落到原图指示的位置。此值在两者之间混合，
-因此两端都是真实画面，中间任意值也都是。
-
-0 精确返回上采样器的输出。1 是模型的画面。
-
-超过 1 会沿同方向继续越过去，这不是模型要求的——
-用它观察模型做了什么，再调回来。想要更强效果就推这个：
-强度（Intensity）属于模型内部，由它决定如何利用。");
+        HelpMarker("画面向模型画面靠拢的程度。\n\n模型的答案不是叠加到画面上——它是一张完整的画面，\n已重新缩放使其亮度落到原图指示的位置。此值在两者之间混合，\n因此两端都是真实画面，中间任意值也都是。\n\n0 精确返回上采样器的输出。1 是模型的画面。\n\n超过 1 会沿同方向继续越过去，这不是模型要求的——\n用它观察模型做了什么，再调回来。想要更强效果就推这个：\n强度（Intensity）属于模型内部，由它决定如何利用。");
 
         float colour = config->DlssNrColourStrength.value_or_default();
         if (ImGui::SliderFloat("色彩强度", &colour, 0.0f, 4.0f, "%.2f"))
@@ -300,20 +253,7 @@ void RenderMenu(Config* config, float menuResScale)
         if (ImGui::SmallButton("重置##colour"))
             config->DlssNrColourStrength = 1.0f;
 
-        HelpMarker("模型的颜色是否随其亮度一起生效。
-
-0 完全保留游戏自身色调——每个像素都是原始颜色，
-仅亮度承载模型的判断。游戏级准确的颜色，加上细节。
-1 同时带入模型自己的色调，并钳制到 AP1，
-因此不会要求不可达的颜色。
-
-它本身不会偏移色相：它在两张成品画面之间插值，
-而非向其中一张叠加色差——后者正是过去让暖色主体
-回来变绿的原因。
-
-超过 1 会过饱和：颜色保持色相但更鲜艳，
-并在显示器能显示的边缘处滚降，而不是削平成一团过曝。
-1 是模型自身的颜色；想要更冲击可继续往上推。");
+        HelpMarker("模型的颜色是否随其亮度一起生效。\n\n0 完全保留游戏自身色调——每个像素都是原始颜色，\n仅亮度承载模型的判断。游戏级准确的颜色，加上细节。\n1 同时带入模型自己的色调，并钳制到 AP1，\n因此不会要求不可达的颜色。\n\n它本身不会偏移色相：它在两张成品画面之间插值，\n而非向其中一张叠加色差——后者正是过去让暖色主体\n回来变绿的原因。\n\n超过 1 会过饱和：颜色保持色相但更鲜艳，\n并在显示器能显示的边缘处滚降，而不是削平成一团过曝。\n1 是模型自身的颜色；想要更冲击可继续往上推。");
 
         // Experimental. 0 off (soft knee), 1 Neutwo + our composition, 2 Neutwo + pure-inverse replace,
         // 3 hybrid+composed, 4 hybrid+replace (identity midtones + unclipped highlights). Always shown.
@@ -327,29 +267,7 @@ void RenderMenu(Config* config, float menuResScale)
                          IM_ARRAYSIZE(reversibleNames)))
             config->DlssNrReversibleMode = (uint32_t) reversible;
 
-        HelpMarker("模型看到什么，以及它的答案如何返回。
-
-关闭（软拐点）：默认。它把高光压得很狠，模型无法解析其中的细节
-——柔光场景没问题，亮场景偏弱。
-
-Neutwo 合成：一条不削波的曲线，让模型看到高光细节，
-再配合上面的所有（细节/色彩强度、高光保护、调色）。在亮场景占优，
-但该曲线也压缩中间调，柔光内容下可能比关闭更差。
-它还会偏移白点——切换时请重新检查。
-
-混合合成：两者之长，推荐使用。中间调恒等——在柔光处与关闭一样好——
-只有高光走不削波滚降，既找回关闭所压掉的细节，又不放弃
-Neutwo 所牺牲的中间调。它几乎不偏移白点。
-
-替换：原始模型直接经精确逆变换返回，不做任何合成
-——无保护、无调色、无强度。没有强光时很漂亮，但强光在运动中会闪烁。
-属于参考，不是日常设置。
-
-混合替换：与替换一样是原始模型，但走混合曲线——
-解码在中间调恒等，闪烁被限制在真正的亮高光，而非处处。
-保留替换的大部分细节，却稳定得多。若你爱替换的观感但受不了闪烁，用这个。
-
-关闭与之前逐字节相同。");
+        HelpMarker("模型看到什么，以及它的答案如何返回。\n\n关闭（软拐点）：默认。它把高光压得很狠，模型无法解析其中的细节\n——柔光场景没问题，亮场景偏弱。\n\nNeutwo 合成：一条不削波的曲线，让模型看到高光细节，\n再配合上面的所有（细节/色彩强度、高光保护、调色）。在亮场景占优，\n但该曲线也压缩中间调，柔光内容下可能比关闭更差。\n它还会偏移白点——切换时请重新检查。\n\n混合合成：两者之长，推荐使用。中间调恒等——在柔光处与关闭一样好——\n只有高光走不削波滚降，既找回关闭所压掉的细节，又不放弃\nNeutwo 所牺牲的中间调。它几乎不偏移白点。\n\n替换：原始模型直接经精确逆变换返回，不做任何合成\n——无保护、无调色、无强度。没有强光时很漂亮，但强光在运动中会闪烁。\n属于参考，不是日常设置。\n\n混合替换：与替换一样是原始模型，但走混合曲线——\n解码在中间调恒等，闪烁被限制在真正的亮高光，而非处处。\n保留替换的大部分细节，却稳定得多。若你爱替换的观感但受不了闪烁，用这个。\n\n关闭与之前逐字节相同。");
 
         ImGui::SeparatorText("模型");
 
@@ -360,10 +278,7 @@ Neutwo 所牺牲的中间调。它几乎不偏移白点。
         if (ImGui::Combo("模型预设", &preset, nrPresetNames, IM_ARRAYSIZE(nrPresetNames)))
             config->DlssNrPreset = (uint32_t) preset;
 
-        HelpMarker("默认把选择权交给模型。
-
-与超分辨率或光线重建的预设不是同一套刻度——
-相同的数字在这里含义不同。");
+        HelpMarker("默认把选择权交给模型。\n\n与超分辨率或光线重建的预设不是同一套刻度——\n相同的数字在这里含义不同。");
 
         static const char* nrStyleNames[] = { "默认（标准）", "自然", "电影感" };
         int style = (int) config->DlssNrStyle.value_or_default();
@@ -374,24 +289,11 @@ Neutwo 所牺牲的中间调。它几乎不偏移白点。
         if (ImGui::Combo("风格", &style, nrStyleNames, IM_ARRAYSIZE(nrStyleNames)))
             config->DlssNrStyle = (uint32_t) style;
 
-        HelpMarker("模型自身的处理风格。
-
-默认（标准）：最强。提升局部对比、加深光照，
-可能过饱和或显得风格化——多数「模型改变了我的游戏观感」
-都来自这个风格。
-
-自然：同样的细节工作但手法更温和。让肤色与色调平衡
-更接近游戏原渲染。
-
-电影感：压低光泽与过度处理，呈现电影质感。
-
-在模型构建时读取，更改后片刻即重建。名称来自社区测试；
-NVIDIA 在二进制里没有提供名称。");
+        HelpMarker("模型自身的处理风格。\n\n默认（标准）：最强。提升局部对比、加深光照，\n可能过饱和或显得风格化——多数「模型改变了我的游戏观感」\n都来自这个风格。\n\n自然：同样的细节工作但手法更温和。让肤色与色调平衡\n更接近游戏原渲染。\n\n电影感：压低光泽与过度处理，呈现电影质感。\n\n在模型构建时读取，更改后片刻即重建。名称来自社区测试；\nNVIDIA 在二进制里没有提供名称。");
 
         DeferredSlider("强度", &config->DlssNrIntensity, 0.0f, 2.0f, 1.0f);
 
-        HelpMarker("模型自身的强度控制，在模型内部生效。与上面的细节强度不同，
-后者是对结果进行事后缩放。");
+        HelpMarker("模型自身的强度控制，在模型内部生效。与上面的细节强度不同，\n后者是对结果进行事后缩放。");
 
         DeferredSlider("局部结构", &config->DlssNrLocalStructure, 0.0f, 2.0f, 1.0f);
 
@@ -400,8 +302,7 @@ NVIDIA 在二进制里没有提供名称。");
 
         DeferredSlider("皮肤结构", &config->DlssNrSkinStructure, -1.0f, 2.0f, -1.0f);
 
-        HelpMarker("-1 表示跟随局部结构，也是模型自身的默认值——它不是强度为零。
-0 及以上则独立于画面其余部分设置皮肤。");
+        HelpMarker("-1 表示跟随局部结构，也是模型自身的默认值——它不是强度为零。\n0 及以上则独立于画面其余部分设置皮肤。");
 
         bool autoMask = config->DlssNrAutoMask.value_or_default();
         if (ImGui::Checkbox("自动皮肤掩码", &autoMask))
@@ -411,9 +312,7 @@ NVIDIA 在二进制里没有提供名称。");
 
         ImGui::SeparatorText("色彩");
 
-        ImGui::TextDisabled("模型是用成品、sRGB 编码的画面训练的。上采样器的输出不是这种：
-它是线性的、开放式的。这些选项决定如何把它映射成模型认得的东西。
-若游戏报告某帧已做过色调映射，则原样跳过，这些都不生效。");
+        ImGui::TextDisabled("模型是用成品、sRGB 编码的画面训练的。上采样器的输出不是这种：\n它是线性的、开放式的。这些选项决定如何把它映射成模型认得的东西。\n若游戏报告某帧已做过色调映射，则原样跳过，这些都不生效。");
 
         {
         // Logarithmic, because the useful range is not linear. A quarter to 240: the low end because
@@ -458,18 +357,7 @@ NVIDIA 在二进制里没有提供名称。");
                 // step, and so no way for the two to disagree.
             }
 
-            HelpMarker("用于除画面的那个数字从何而来。
-
-仅纸张白——只用下面的滑块，别无其他。适合曝光从不变化的游戏，
-一旦变化就不对了：一个常数无法同时服务洞穴与旷野。
-
-游戏自身曝光——从游戏交给上采样器的纹理中读取。
-这是最好的来源，因为它由上游决定，本 pass 的任何操作都无法改变它。
-并非每个游戏都提供。
-
-扫描找到的缓冲——用于计算了曝光却从不传出的游戏。属于猜测：
-候选按形状匹配，在 GTA V 中最佳的那个以自身尺度跟踪真实曝光，
-由锚点的比值抵消。需先锚定一次，之后还要核对。");
+            HelpMarker("用于除画面的那个数字从何而来。\n\n仅纸张白——只用下面的滑块，别无其他。适合曝光从不变化的游戏，\n一旦变化就不对了：一个常数无法同时服务洞穴与旷野。\n\n游戏自身曝光——从游戏交给上采样器的纹理中读取。\n这是最好的来源，因为它由上游决定，本 pass 的任何操作都无法改变它。\n并非每个游戏都提供。\n\n扫描找到的缓冲——用于计算了曝光却从不传出的游戏。属于猜测：\n候选按形状匹配，在 GTA V 中最佳的那个以自身尺度跟踪真实曝光，\n由锚点的比值抵消。需先锚定一次，之后还要核对。");
 
             // Availability, in colour, for the option currently chosen.
             if (source == 1)
@@ -553,11 +441,9 @@ NVIDIA 在二进制里没有提供名称。");
         //
         // They used to share one stored value, narrowed to 0.25..4 when the toggle was on. That kept
         // a ruinous value unreachable but left two worse problems: moving the slider in one mode
-        // silently destroyed the number found in the other, and there was no way back to "just take
-        // the game's answer" short of knowing that the number for it was 1. Separate values fix both.
+        // silently destroyed the number found in the other, and there was no way back to "just take\n// the game's answer" short of knowing that the number for it was 1. Separate values fix both.
         // Switching modes is now non-destructive in both directions.
-        // The trim belongs to both automatic sources, since both end in "the game's number times a
-        // little". Only the manual source gets the absolute slider.
+        // The trim belongs to both automatic sources, since both end in "the game's number times a\n// little". Only the manual source gets the absolute slider.
         // One slider per source, each remembering its own number.
         //
         // A trim on the game's exposure and a trim on a buffer the scan found are trims on different
@@ -627,12 +513,7 @@ NVIDIA 在二进制里没有提供名称。");
                         config->DlssNrWhitePointScale = pw;
                 }
 
-                HelpMarker("所选校准点的白点，或——未选中任何行时——下一次按「锚定」时
-捕获的值。
-
-调到此处画面正确，再锚定。移动到差异很大的光照下再重复：
-两个点即固定缓冲的真实关系，白点在两点之间保持。
-点击下方某行可回来调整该点；再次点击则松开。");
+                HelpMarker("所选校准点的白点，或——未选中任何行时——下一次按「锚定」时\n捕获的值。\n\n调到此处画面正确，再锚定。移动到差异很大的光照下再重复：\n两个点即固定缓冲的真实关系，白点在两点之间保持。\n点击下方某行可回来调整该点；再次点击则松开。");
             }
 
             // The trim multiplies the interpolated result, and in the steady state it is the control
@@ -651,9 +532,7 @@ NVIDIA 在二进制里没有提供名称。");
                 if (ImGui::SmallButton("重置##scantrim"))
                     config->DlssNrScanTrim = 1.0f;
 
-                HelpMarker("扫描白点的乘数，也是你在锚点之间调整的控件：
-调到当前光照下画面正确，再按「在此锚定」——
-它把微调后的值固化为新点，并把微调重置为 1。");
+                HelpMarker("扫描白点的乘数，也是你在锚点之间调整的控件：\n调到当前光照下画面正确，再按「在此锚定」——\n它把微调后的值固化为新点，并把微调重置为 1。");
             }
         }
         else if (wpSource == 1)
@@ -684,14 +563,7 @@ NVIDIA 在二进制里没有提供名称。");
                     config->DlssNrWhitePointTrim = 1.0f;
             }
 
-            HelpMarker("游戏所供曝光的乘数。1.00x 即精确采用其数值，这里就是正确答案。
-
-这不是糊弄因子。若某游戏需要微调远离 1 才好看，
-说明读取到的曝光对该游戏是错的，而非游戏需要微调。
-约 0.8 到 1.25 是诚实的调校；要拉到 4 说明上游某处坏了，
-微调只是在掩盖它。
-
-你手动设的白点被单独保存，关闭上面的选项后会原样恢复。");
+            HelpMarker("游戏所供曝光的乘数。1.00x 即精确采用其数值，这里就是正确答案。\n\n这不是糊弄因子。若某游戏需要微调远离 1 才好看，\n说明读取到的曝光对该游戏是错的，而非游戏需要微调。\n约 0.8 到 1.25 是诚实的调校；要拉到 4 说明上游某处坏了，\n微调只是在掩盖它。\n\n你手动设的白点被单独保存，关闭上面的选项后会原样恢复。");
         }
         else
         {
@@ -706,26 +578,7 @@ NVIDIA 在二进制里没有提供名称。");
                                    ImGuiSliderFlags_Logarithmic))
                 config->DlssNrWhitePointScale = wpScale;
 
-        HelpMarker("画面在交给模型之前所除的那个值。没有别的白点；这就是全部。
-
-模型是用白色位于 1 的成品画面训练的。上采样器的输出是线性、
-开放式的，因此必须有东西说明白色在哪——当游戏的 DLSS 缓冲是线性 HDR 时，
-这个数很少接近 1。在《怪物猎人：荒野》中实测要 16 或更高，
-模型的细节才能到达画面；而适合阴凉营地的值，对同一款游戏的
-白天场景仍太小。
-
-太低则几乎每个像素都触发软拐点：模型看到的是一张平白的近白画面，
-它的答案被缩放掉，只有色相幸存——表现为色偏而非细节丢失。
-太高则看到欠曝画面，答案退化，且同一数值在输出时还会放大该误差。
-
-调高直到画面不再改善。超过该点它不会趋于平台，
-而是朝反方向变差。
-
-它曾是实测白点的乘数。该测量已被移除：它读的是场景亮度
-而非白色应处的位置，把画面交给了暗三倍的模型，
-高光路径也无可回馈。
-
-在强度为零时，无论此值如何，画面仍逐字节相同。");
+        HelpMarker("画面在交给模型之前所除的那个值。没有别的白点；这就是全部。\n\n模型是用白色位于 1 的成品画面训练的。上采样器的输出是线性、\n开放式的，因此必须有东西说明白色在哪——当游戏的 DLSS 缓冲是线性 HDR 时，\n这个数很少接近 1。在《怪物猎人：荒野》中实测要 16 或更高，\n模型的细节才能到达画面；而适合阴凉营地的值，对同一款游戏的\n白天场景仍太小。\n\n太低则几乎每个像素都触发软拐点：模型看到的是一张平白的近白画面，\n它的答案被缩放掉，只有色相幸存——表现为色偏而非细节丢失。\n太高则看到欠曝画面，答案退化，且同一数值在输出时还会放大该误差。\n\n调高直到画面不再改善。超过该点它不会趋于平台，\n而是朝反方向变差。\n\n它曾是实测白点的乘数。该测量已被移除：它读的是场景亮度\n而非白色应处的位置，把画面交给了暗三倍的模型，\n高光路径也无可回馈。\n\n在强度为零时，无论此值如何，画面仍逐字节相同。");
         }
 
         // Highlight guard, directly under the white point / trim -- it bounds the model's edit and
@@ -738,10 +591,7 @@ NVIDIA 在二进制里没有提供名称。");
         if (ImGui::SmallButton("重置##guard"))
             config->DlssNrMaxRatio = 2.0f;
 
-        HelpMarker("该 pass 让任一像素移动的最大幅度，以它原值的倍数为计，
-双向都限——像素变亮不能超过此值，变暗不能超过其倒数。
-灯光处模型最没话说，重缩放其答案伤害最大；2× 保留细节，
-同时防止条形灯变成一串彩色格子。仅当亮区看起来被削平时才调高。");
+        HelpMarker("该 pass 让任一像素移动的最大幅度，以它原值的倍数为计，\n双向都限——像素变亮不能超过此值，变暗不能超过其倒数。\n灯光处模型最没话说，重缩放其答案伤害最大；2× 保留细节，\n同时防止条形灯变成一串彩色格子。仅当亮区看起来被削平时才调高。");
 
         // Directly under the white point, because that is the number it moves and the number the
         // anchor captures. It used to sit under Inspect, a whole section away from the slider it
@@ -775,12 +625,7 @@ NVIDIA 在二进制里没有提供名称。");
                     ImGui::Checkbox("屏幕显示测光表", &meter))
                     config->DlssNrScanMeter = meter;
 
-                HelpMarker("角落的一盏灯：红代表暗、绿代表全亮，之间是过渡色，旁边带读数。
-
-用于一眼看出扫描是在「跟踪」而非仅仅运行。走进阴影它应滑向红色；
-走出来应变为绿色。若方向反了，就是上面那个设置（数值方向相反）的用途。
-
-纯读数。不改变任何东西。");
+                HelpMarker("角落的一盏灯：红代表暗、绿代表全亮，之间是过渡色，旁边带读数。\n\n用于一眼看出扫描是在「跟踪」而非仅仅运行。走进阴影它应滑向红色；\n走出来应变为绿色。若方向反了，就是上面那个设置（数值方向相反）的用途。\n\n纯读数。不改变任何东西。");
 
             // Shown when the scan is actually running, whichever way it got switched on.
             if (DlssNr::ExposureScan::Scanning())
@@ -831,17 +676,7 @@ NVIDIA 在二进制里没有提供名称。");
 
                 ImGui::EndDisabled();
 
-                HelpMarker("先把画面调到正确，再按它——把当前观感固化为一个点。
-第一个点用上面的白点滑块；之后每个点，走到不同光照下用微调，
-锚定会把它烘焙成新点。
-
-第一次按校准一个点——白点从此按比值跟随扫描，与之前一样。
-走到差异很大的光照下，重新设白点，再按一次：
-第二个点即钉死缓冲的真实曲线，两点之间全部正确，
-而非只在单个锚点附近。最多八个。
-
-该表按游戏区分且可分享：一人校准某游戏，
-拿到该配置的所有人都得到相同数字。");
+                HelpMarker("先把画面调到正确，再按它——把当前观感固化为一个点。\n第一个点用上面的白点滑块；之后每个点，走到不同光照下用微调，\n锚定会把它烘焙成新点。\n\n第一次按校准一个点——白点从此按比值跟随扫描，与之前一样。\n走到差异很大的光照下，重新设白点，再按一次：\n第二个点即钉死缓冲的真实曲线，两点之间全部正确，\n而非只在单个锚点附近。最多八个。\n\n该表按游戏区分且可分享：一人校准某游戏，\n拿到该配置的所有人都得到相同数字。");
 
                 if (!isSource)
                     ImGui::TextDisabled("（扫描仅在监视——上方白点来自其他来源）");
@@ -909,10 +744,7 @@ NVIDIA 在二进制里没有提供名称。");
                     if (ImGui::Checkbox("数值方向相反", &inverted))
                         config->DlssNrScanInverted = inverted;
 
-                    HelpMarker("若画面在本应变好的方向上变差，就翻转此项。多数引擎存储的曝光
-随场景变亮而下降；有些存储其倒数，而按形状找到的缓冲
-不会说明是哪种。在不同光照下加第二个锚点，它会自动判定，
-此选项随之消失。");
+                    HelpMarker("若画面在本应变好的方向上变差，就翻转此项。多数引擎存储的曝光\n随场景变亮而下降；有些存储其倒数，而按形状找到的缓冲\n不会说明是哪种。在不同光照下加第二个锚点，它会自动判定，\n此选项随之消失。");
                 }
 
                 // The scan -> white point readout is shown above the sliders now, not here.
@@ -973,31 +805,14 @@ NVIDIA 在二进制里没有提供名称。");
         if (ImGui::Checkbox("冻结帧", &held))
             config->DlssNrHoldFrame = held;
 
-        HelpMarker("冻结模型处理的画面。冻结期间，改白点、强度、可逆模式、模型预设
-——上采样器之下的任何项——只有该设置变化，场景不动。
-
-它无法展示：DLSS/FSR/XeSS 上采样预设或任何上游内容
-（冻结帧不会重跑上采样器），以及游戏自身的 HUD 和后处理，
-它们在此 pass 之后运行并持续更新。冻结期间白点停止测量、保持其值，
-因此不会漂移而干扰对比。
-
-隐藏菜单它仍保持冻结。取消勾选即恢复。");
+        HelpMarker("冻结模型处理的画面。冻结期间，改白点、强度、可逆模式、模型预设\n——上采样器之下的任何项——只有该设置变化，场景不动。\n\n它无法展示：DLSS/FSR/XeSS 上采样预设或任何上游内容\n（冻结帧不会重跑上采样器），以及游戏自身的 HUD 和后处理，\n它们在此 pass 之后运行并持续更新。冻结期间白点停止测量、保持其值，\n因此不会漂移而干扰对比。\n\n隐藏菜单它仍保持冻结。取消勾选即恢复。");
 
         static const char* compareNames[] = { "关闭", "并排", "擦除" };
         int compare = (int) config->DlssNrCompare.value_or_default();
         if (ImGui::Combo("对比", &compare, compareNames, IM_ARRAYSIZE(compareNames)))
             config->DlssNrCompare = (uint32_t) compare;
 
-        HelpMarker("让该 pass 与其自身对照，可同时看到两者，而非切换后再靠记忆。
-
-并排：把整帧放进两半，左侧原样、右侧编辑后。
-两半都被横向压缩以适应，因此适合查看而非游玩。
-
-擦除：在分割处切开单帧，不做任何重采样，
-画面形状正确、可正常游玩。拖动下方分割位置；它是存储的设置，
-关闭菜单后保持不变。
-
-两者都无需菜单打开即可持续工作。接缝处以一条细线标示。");
+        HelpMarker("让该 pass 与其自身对照，可同时看到两者，而非切换后再靠记忆。\n\n并排：把整帧放进两半，左侧原样、右侧编辑后。\n两半都被横向压缩以适应，因此适合查看而非游玩。\n\n擦除：在分割处切开单帧，不做任何重采样，\n画面形状正确、可正常游玩。拖动下方分割位置；它是存储的设置，\n关闭菜单后保持不变。\n\n两者都无需菜单打开即可持续工作。接缝处以一条细线标示。");
 
         if (compare != 0)
         {
@@ -1009,9 +824,7 @@ NVIDIA 在二进制里没有提供名称。");
             if (ImGui::Checkbox("标注两侧", &tags))
                 config->DlssNrCompareTags = tags;
 
-            HelpMarker("把哪边是哪边直接写进画面，这样截图离开本机后仍能说明。
-绘制在画面自身平面内：擦除模式下分割线对标签的显现与隐藏
-与对图像完全一致，且无需拖动。交换两侧会让标签随其画面一起移动。");
+            HelpMarker("把哪边是哪边直接写进画面，这样截图离开本机后仍能说明。\n绘制在画面自身平面内：擦除模式下分割线对标签的显现与隐藏\n与对图像完全一致，且无需拖动。交换两侧会让标签随其画面一起移动。");
 
             if (tags)
             {
@@ -1020,11 +833,7 @@ NVIDIA 在二进制里没有提供名称。");
                     config->DlssNrTagScale = std::clamp(tagScale, 0.5f, 5.0f);
             }
 
-            HelpMarker("把编辑后的画面放到另一侧。
-
-在你确定偏爱哪边后值得一做：眼睛对左右并不公平，
-差异可能仅因位置就看起来像改进。若交换后同一侧仍胜出，
-说明你看到的是该 pass 的效果，而非位置错觉。");
+            HelpMarker("把编辑后的画面放到另一侧。\n\n在你确定偏爱哪边后值得一做：眼睛对左右并不公平，\n差异可能仅因位置就看起来像改进。若交换后同一侧仍胜出，\n说明你看到的是该 pass 的效果，而非位置错觉。");
         }
 
         if (compare == 1)
@@ -1033,14 +842,7 @@ NVIDIA 在二进制里没有提供名称。");
             if (ImGui::SliderFloat("缩放", &zoom, 1.0f, 2.0f, "%.2f"))
                 config->DlssNrCompareZoom = std::clamp(zoom, 1.0f, 2.0f);
 
-            HelpMarker("每一半显示画面的多少。
-
-半屏是画面宽度的一半、高度相同，因此画面无法
-在保持形状的同时填满它。
-
-为 1 时整帧以正确比例呈现，上下带黑条。
-为 2 时半屏被填满，两侧被裁掉。
-中间任意值在两者之间取舍。");
+            HelpMarker("每一半显示画面的多少。\n\n半屏是画面宽度的一半、高度相同，因此画面无法\n在保持形状的同时填满它。\n\n为 1 时整帧以正确比例呈现，上下带黑条。\n为 2 时半屏被填满，两侧被裁掉。\n中间任意值在两者之间取舍。");
         }
 
         if (compare == 2)
@@ -1049,8 +851,7 @@ NVIDIA 在二进制里没有提供名称。");
             if (ImGui::SliderFloat("分割位置", &split, 0.0f, 1.0f, "%.2f"))
                 config->DlssNrCompareSplit = std::clamp(split, 0.0f, 1.0f);
 
-            HelpMarker("擦除的切割位置。其左侧是上采样器产出的画面，
-右侧是模型编辑后的画面。");
+            HelpMarker("擦除的切割位置。其左侧是上采样器产出的画面，\n右侧是模型编辑后的画面。");
         }
 
         static const char* debugNames[] = { "关闭", "代理（模型所见）", "模型原始输出",
@@ -1059,11 +860,7 @@ NVIDIA 在二进制里没有提供名称。");
         if (ImGui::Combo("调试视图", &debugView, debugNames, IM_ARRAYSIZE(debugNames)))
             config->DlssNrDebugView = (uint32_t) debugView;
 
-        HelpMarker("代理是交给模型的画面——若它看起来不对，说明白点错了，
-下游一切都不必再评。
-
-差异显示模型实际改了什么，放大二十倍并以灰色居中。
-那里一片平灰意味着它什么都没做。");
+        HelpMarker("代理是交给模型的画面——若它看起来不对，说明白点错了，\n下游一切都不必再评。\n\n差异显示模型实际改了什么，放大二十倍并以灰色居中。\n那里一片平灰意味着它什么都没做。");
 
         ImGui::PopItemWidth();
     }
